@@ -1,0 +1,14 @@
+#rename files with just last 3 numbers 123.ping
+import os
+
+# Path to the output folder
+output_folder = '/content/drive/MyDrive/Colab Notebooks/output_folder'
+
+# Iterate over each file in the folder and rename it
+for filename in os.listdir(output_folder):
+    # Check if the file is a PNG image
+    if filename.endswith('.png'):
+        # Extract the last 3 digits of the filename
+        new_filename = filename[-7:-4] + '.png'
+        # Rename the file
+        os.rename(os.path.join(output_folder, filename), os.path.join(output_folder, new_filename))
