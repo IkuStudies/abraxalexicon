@@ -9,7 +9,7 @@ from PIL import Image
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
 # Configuration for pytesseract to expect both Greek and English words, and to transcribe the text in the txt file as it appears in the images
-config = '--psm 6 --oem 2 -c preserve_interword_spaces=1 -c page_separator=""'
+config = '--psm 6 --oem 3 -c preserve_interword_spaces=1 -c page_separator=""'
 
 # Output folder from above containing the PNG images of the pdf is the new input folder. Copy path and paste it in if it's not already.
 input_folder = '/content/drive/MyDrive/Colab Notebooks/output_folder'
