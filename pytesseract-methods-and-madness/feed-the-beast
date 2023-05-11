@@ -1,0 +1,38 @@
+#####Feed the above output folder of images to pytesseract to process one by one and extract text
+#### here's a code block that takes an input folder of PNG images, processes them one by one using pytesseract, and writes the extracted text 
+###into an output file. 
+##The output file is a plain text file with UTF-8 encoding, which should support ancient Greek and English characters.
+import os
+import pytesseract
+from PIL import Image
+
+pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+
+# Configuration for pytesseract to expect both Greek and English words, and to transcribe the text in the txt file as it appears in the images
+config = '--psm 6 --oem 2 -c preserve_interword_spaces=1 -c page_separator=""'
+
+# Output folder from above containing the PNG images of the pdf is the new input folder. Copy path and paste it in if it's not already.
+input_folder = '/content/drive/MyDrive/Colab Notebooks/output_folder'
+
+# Output file to store the extracted text
+output_file = '/content/drive/MyDrive/Colab Notebooks/extracted.txt'
+
+# Get a list of all PNG files in the input folder and sort them based on their numerical values
+png_files = [filename for filename in os.listdir(input_folder) if filename.endswith('.png')]
+png_files.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
+
+# Open the output file in write mode
+with open(output_file, 'w', encoding='utf-8') as f:
+    # Loop through each file in the input folder in numerical order
+    for filename in png_files:
+        # Open the image using PIL
+        image_path = os.path.join(input_folder, filename)
+        image = Image.open(image_path)
+
+        # Extract text from the image using pytesseract with the specified configuration
+        text = pytesseract.image_to_string(image, lang='eng+ell', config=config)
+
+        # Write the extracted text to the output file
+        f.write(text)
+
+
