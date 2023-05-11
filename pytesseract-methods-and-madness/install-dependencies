@@ -1,0 +1,12 @@
+#Install Dependencies
+!pip install pdf2image
+!sudo apt-get install poppler-utils
+!sudo apt-get install libleptonica-dev tesseract-ocr libtesseract-dev
+!sudo apt-get install tesseract-ocr-eng
+!sudo apt-get install tesseract-ocr-ell
+!pip install pytesseract
+!apt-get install -y tesseract-ocr-eng tesseract-ocr-ell
+!sudo apt install tesseract-ocr
+!sudo apt install tesseract-ocr-eng
+!sudo apt install tesseract-ocr-ell
+!apt-get install --only-upgrade tesseract-ocr
