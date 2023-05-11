@@ -1,0 +1,13 @@
+Step1 is installing dependencies.  my apologies if I missed any, if you kick a module not found error just add to this list and rerun
+Step2 is feed the pdf into pdf2img to break down a pdf into images in a folder so pytesseract doesn't blow out the RAM
+Step3 is to rename those images with just the last 3 numbers, if your pdf is over 999 pages adjust code accordingly
+Step4 is to feed pytesseract.  might want to configure oem and psm depending on situation, but the configuration in the file 
+         works well for converting the basic text into txt file maintaining spaces
+
+the aim of the program is converting a corrupted or otherwise unformatted or unreadable pdf into a txt file
+its pretty accurate but not perfect.  experimenting with configurations might be useful, but this did what I needed
+
+just publishing the code and the method of extraction for the ancient greek for the abraxa lexicon.  
+this added 30,000 ancient greek words from the english greek lexicon to the greek database.
+
+any questions lmk
