@@ -1,0 +1,93 @@
+#first you set up a table in a mysql database, for mine columns are word, pronunciation, definition
+#Import your wordlists into the word column via csv file
+#this program will go through the wordlist and transliterate each letter to its IPA equivelent and record in the pronunciation column
+#disclaimer: this is not the best way to do it for total accuracy, there are better ways utilizing libraries, I was just tired of relying on buggy third parties 
+#so I made this key to just do it myself
+
+#this code works very slow.  it took 24 hours to process 250,000 words
+#I tried batch processing and mysql bugs out too much, I couldn't debug batch processing
+#I tried multithreading and also mysql bugs out too much, I tried threadlocking, I tried many things to debug but it kept skipping its job and not producing
+#so this is the slow version that actually works for transliterating basic letter to IPA phoneme and inserting it into the pronunciation column
+
+#note: if anyone has a better solution that is faster pleaase let me know, I have another 100 million words I am processing for the database.  if I could increase the
+#speed by 100x I would be stoked.  lmk ikustudies@gmail.com
+
+#here's the low and slow transliterator I will be using to process the wordlists
+
+
+import mysql.connector
+from tqdm import tqdm
+
+# Define the Greek to IPA mapping
+greek_to_ipa = {
+    'α': 'a',
+    'ά': 'a',
+    'β': 'v',
+    'γ': 'ɣ',
+    'δ': 'ð',
+    'ε': 'e',
+    'έ': 'e',
+    'ζ': 'z',
+    'η': 'i',
+    'ή': 'i',
+    'θ': 'θ',
+    'ι': 'i',
+    'ί': 'i',
+    'ϊ': 'i',
+    'ΐ': 'i',
+    'κ': 'k',
+    'λ': 'l',
+    'μ': 'm',
+    'ν': 'n',
+    'ξ': 'ks',
+    'ο': 'o',
+    'ό': 'o',
+    'π': 'p',
+    'ρ': 'r',
+    'σ': 's',
+    'ς': 's',
+    'τ': 't',
+    'υ': 'y',
+    'ύ': 'y',
+    'ϋ': 'y',
+    'ΰ': 'y',
+    'φ': 'f',
+    'χ': 'x',
+    'ψ': 'ps',
+    'ω': 'ɔ',
+    'ώ': 'ɔ'
+}
+
+# Connect to the database
+db = mysql.connector.connect(
+  host="localhost",
+  user="josh",
+  password="password",
+  database="abraxa"
+)
+
+# Create a cursor to execute SQL queries
+cursor = db.cursor()
+
+# Query the database to get all the rows without a pronunciation
+cursor.execute("SELECT word, pronunciation FROM greek WHERE pronunciation IS NULL")
+
+# Use tqdm to show progress and estimate time remaining
+for i, (word, pronunciation) in tqdm(enumerate(cursor.fetchall()), desc="Transliterating words", total=cursor.rowcount):
+    if not pronunciation:
+        # Transliterate the word to IPA using the mapping
+        ipa = ''.join(greek_to_ipa.get(char, '') for char in word)
+
+        # Update the row with the new pronunciation
+        update_query = f"UPDATE greek SET pronunciation = %s WHERE word = %s"
+        cursor.execute(update_query, (ipa, word))
+
+        # Commit the changes to the database
+        db.commit()
+
+    # Print a message every 1000 rows
+    if (i + 1) % 1000 == 0:
+        print(f"Processed {i + 1} rows")
+
+# Close the database connection
+db.close()
