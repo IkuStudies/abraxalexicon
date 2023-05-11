@@ -1,0 +1,75 @@
+#same method as greek, but with persian key
+
+import mysql.connector
+from tqdm import tqdm
+
+# Define the Persian to IPA mapping
+persian_to_ipa = {
+    'آ': 'ɒː',
+    'ا': 'æ',
+    'ب': 'b',
+    'پ': 'p',
+    'ت': 't',
+    'ث': 's',
+    'ج': 'dʒ',
+    'چ': 'tʃ',
+    'ح': 'h',
+    'خ': 'x',
+    'د': 'd',
+    'ذ': 'z',
+    'ر': 'ɾ',
+    'ز': 'z',
+    'ژ': 'ʒ',
+    'س': 's',
+    'ش': 'ʃ',
+    'ص': 's',
+    'ض': 'z',
+    'ط': 't',
+    'ظ': 'z',
+    'ع': 'ʔ',
+    'غ': 'ɣ',
+    'ف': 'f',
+    'ق': 'ɢ',
+    'ک': 'k',
+    'گ': 'ɡ',
+    'ل': 'l',
+    'م': 'm',
+    'ن': 'n',
+    'و': 'v',
+    'ه': 'h',
+    'ی': 'j',
+    'ئ': 'ʔ'
+}
+
+# Connect to the database
+db = mysql.connector.connect(
+  host="localhost",
+  user="josh",
+  password="Joshman8!",
+  database="abraxa"
+)
+
+# Create a cursor to execute SQL queries
+cursor = db.cursor()
+
+# Query the database to get all the rows
+cursor.execute("SELECT word, pronunciation FROM persian")
+
+# Use tqdm to show progress and estimate time remaining
+for i, (word, pronunciation) in tqdm(enumerate(cursor.fetchall()), desc="Transliterating words", total=cursor.rowcount):
+    # Transliterate the word to IPA using the mapping
+    ipa = ''.join(persian_to_ipa.get(char, '') for char in word)
+
+    # Update the row with the new pronunciation
+    update_query = f"UPDATE persian SET pronunciation = %s WHERE word = %s"
+    cursor.execute(update_query, (ipa, word))
+
+    # Commit the changes to the database
+    db.commit()
+
+    # Print a message every 1000 rows
+    if (i + 1) % 1000 == 0:
+        print(f"Processed {i + 1} rows")
+
+# Close the database connection
+db.close()
