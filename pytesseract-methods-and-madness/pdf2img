@@ -1,0 +1,13 @@
+## enter the pdf path, and create a folder called output_folder to catch the images of the pdf
+
+from pdf2image import convert_from_path 
+from google.colab import drive
+drive.mount('/content/drive')
+
+# Path of the PDF file to be converted
+pdf_path = '/content/lexicon_repaired.pdf'
+
+# Convert the PDF to images using pdf2image
+images = convert_from_path(pdf_path, dpi=300, output_folder='/content/drive/MyDrive/Colab Notebooks/output_folder', fmt='png', thread_count=4)
+
+print(f"{len(images)} images created in the 'output_folder' folder.")
