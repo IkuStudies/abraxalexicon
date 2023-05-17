@@ -1,21 +1,32 @@
 # abraxalexicon
 this is the abraxa lexicon, a multilingual vector memory milvus database of phonetic transcriptions to search for cognates and homophones across languages
 
-much of the code is processing modules for parsing data, formatting and uploading to database.
+much of the code in this repository was written 
+as language processing modules for parsing data, 
+for formatting and uploading to database.
 
 work in progress 
 
-languages supported rn english greek arabic farsi german french burmese dutch turkish
+languages supported rn 
+english greek arabic farsi german french burmese dutch turkish
 
 with version 1.  now that ive figured out vector mapping support is coming quickly
-for japanese chinese hebrew finnish swedish frisian swahili khazak tamil and middle egyptian
+for 
 
-update 5/17/2023: abraxa lexicon IPA mapping key finalized
+japanese chinese hebrew finnish swedish frisian swahili khazak tamil and middle egyptian
+
+
+
+
+
+update 5/17/2023: abraxa lexicon 
+IPA(international phonetic alphabet)
+mapping key finalized
 
 (link to key)
 (link to key breakdown)
 
-and link to how the abraxa lexicon works for deep language searches
+and (link to how the abraxa lexicon works for deep language searches)
 
 todo
 make graphics showing abraxa workflow for user literacy:
